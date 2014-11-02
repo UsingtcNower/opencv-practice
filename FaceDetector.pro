@@ -13,12 +13,20 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    facedetector.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    facedetector.h
 
 FORMS    += mainwindow.ui
 
 OTHER_FILES += \
     TrainingSet/haarcascade_eye_tree_eyeglasses.xml \
     TrainingSet/haarcascade_frontalface_alt.xml
+
+LIBS += /usr/local/lib/libopencv_core.so \
+        /usr/local/lib/libopencv_highgui.so \
+        /usr/local/lib/libopencv_imgproc.so \
+        /usr/local/lib/libopencv_objdetect.so
+
