@@ -1,6 +1,6 @@
 //#include "mainwindow.h"
 //#include <QApplication>
-#include "facedetector.h"
+#include "src/FaceDetector/facedetector.h"
 
 const int Pictures = 6;
 char *picPath[50] = {"images/face01.jpg",

@@ -1,7 +1,7 @@
-#include "facedetector.h"
+#include "src/FaceDetector/facedetector.h"
 #include <QDebug>
 
-const string face_cascade_file = "TrainingSet/haarcascade_frontalface_alt.xml";
+const char *face_cascade_file = "TrainingSet/haarcascade_frontalface_alt.xml";
 
 FaceDetector::FaceDetector()
 {
@@ -24,7 +24,9 @@ std::vector<Rect> FaceDetector::detect(Mat image) {
     }
     Mat image_gray;
     cvtColor(image, image_gray, CV_BGR2GRAY);
+    display(image_gray, std::vector<Rect>());
     equalizeHist(image_gray, image_gray);
+    display(image_gray, std::vector<Rect>());
 
     CascadeClassifier classifier(face_cascade_file);
     if(classifier.empty()) {

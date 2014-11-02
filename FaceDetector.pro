@@ -14,10 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    facedetector.cpp
+    src/FaceDetector/facedetector.cpp
 
 HEADERS  += mainwindow.h \
-    facedetector.h
+    src/FaceDetector/facedetector.h
 
 FORMS    += mainwindow.ui
 
@@ -29,4 +29,5 @@ LIBS += /usr/local/lib/libopencv_core.so \
         /usr/local/lib/libopencv_highgui.so \
         /usr/local/lib/libopencv_imgproc.so \
         /usr/local/lib/libopencv_objdetect.so
+
 
