@@ -23,10 +23,9 @@ std::vector<Rect> FaceDetector::detect(Mat image) {
         return std::vector<Rect>();
     }
     Mat image_gray;
-    cvtColor(image, image_gray, CV_BGR2GRAY);
-    display(image_gray, std::vector<Rect>());
-    equalizeHist(image_gray, image_gray);
-    display(image_gray, std::vector<Rect>());
+    //cvtColor(image, image_gray, CV_BGR2GRAY);
+    //equalizeHist(image_gray, image_gray);
+    equalizeHist(image, image);
 
     CascadeClassifier classifier(face_cascade_file);
     if(classifier.empty()) {
