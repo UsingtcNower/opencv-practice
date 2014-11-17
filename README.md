@@ -1,4 +1,6 @@
-FaceDetector
+opencv-practice
 ============
 
-detect and classify images by face
+file details
+misc -- some python script 
+facedetector -- face detection
