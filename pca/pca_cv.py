@@ -1,20 +1,15 @@
-import numpy as np
+import cv2 as cv
 
-def project(A,B,Pusai=None):
-    if Pusai is None:
-        return np.dot(A,B)
-    return np.dot(A-Pusai,B)
-
-def pca(X,numOfPca=0):
+def pca(X, numOfPca=0):
     [n,m] = X.shape
+    print X
     Pusai = X.mean(axis=0)
-    print 'mean'
     print Pusai
     X = X - Pusai
-    Cov = np.dot(X,X.T)
-    print 'Cova'
+    print X
+    Cov = cv.mulTransposed(X, False)
     print Cov
-    [eigenvalues, eigenvectors] = np.linalg.eigh(Cov)
+    [retval, eigenvalues, eigenvectors] = cv.eigen(Cov, True)
     indexes = np.argsort(-eigenvalues)
     eigenvalues = eigenvalues[indexes]
     eigenvectors = eigenvectors[:,indexes]
