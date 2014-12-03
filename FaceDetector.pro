@@ -15,11 +15,11 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     src/FaceDetector/facedetector.cpp \
-    src/ImageProcessor/imageprocessor.cpp
+    src/ImageProcessor/faceBeauty.cpp
 
 HEADERS  += mainwindow.h \
     src/FaceDetector/facedetector.h \
-    src/ImageProcessor/imageprocessor.h
+    src/ImageProcessor/imageprocess.h
 
 FORMS    += mainwindow.ui
 
