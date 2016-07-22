@@ -1,10 +1,10 @@
 1. Kalman Filter
-ΪʲôҪKalman Filter��
-����˵����Ϊ����Ӱ�죬������׼ȷ��Ӧ�ÿ����˲�������ȥ������Ӱ�졣
+为什么要Kalman Filter？
+简单来说，因为噪声影响，测量不准确，应用卡曼滤波来尽量去除噪声影响。
 
-Ӧ�ó�����
-��Ԥ����ģ�Ϳ�֪����㶨�����Ի����ʽ�ȡ�
-�й̶���ģ�ͺ󣬲Ż���״̬ת�Ʒ��̣�kalmanfilterӦ�òŷ��㡣
+应用场景：
+当预估的模型可知，如恒定、线性或多项式等。
+有固定的模型后，才会有状态转移方程，kalmanfilter应用才方便。
 
-����ʵ��:
-opencv
+具体实现:
+可使用opencv中KalmanFilter，predict, correct
