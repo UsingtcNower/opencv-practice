@@ -13,3 +13,4 @@
 ####misc
         some python scripts used to experimental
 
+@nower https://github.com/UsingtcNower/opencv-practice/blob/master/LICENSE
