@@ -1,15 +1,15 @@
 ##opencv-practice
   The repo which stores kinds of code using opencv.
 ###Content
-  ####panorama
+####panorama
         dynamic-streaming
-  ####tracking
+####tracking
         algo comparion and summary
-  ####src
+####src
         FaceDetector           
         imageprocess           
-  ####pca
+####pca
         python scripts to implement principle component analysis
-  ####misc
+####misc
         some python scripts used to experimental
 
