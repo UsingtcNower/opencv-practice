@@ -26,3 +26,5 @@
 *.exe
 *.out
 *.app
+*.bak
+tracking/tracking各类算法总结.txt
