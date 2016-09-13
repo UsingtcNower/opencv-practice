@@ -1,20 +1,29 @@
 1. Kalman Filter
-ΪʲôҪKalman Filter��
-����˵����Ϊ����Ӱ�죬������׼ȷ��Ӧ�ÿ����˲�������ȥ������Ӱ�졣
+为什么要Kalman Filter？
+简单来说，因为噪声影响，测量不准确，应用卡曼滤波来尽量去除噪声影响。
 
-Ӧ�ó�����
-��Ԥ����ģ�Ϳ�֪����㶨�����Ի����ʽ�ȡ�
-�й̶���ģ�ͺ󣬲Ż���״̬ת�Ʒ��̣�kalmanfilterӦ�òŷ��㡣
+应用场景：
+当预估的模型可知，如恒定、线性或多项式等。
+有固定的模型后，才会有状态转移方程，kalmanfilter应用才方便。
 
-����ʵ��:
+具体实现:
 opencv
 
 2. CamShift
-�ʺ�׷���������뱳��������Ŀ�ꡣ
-meanshift�ı��֣�֧�ֳߴ����ŵ�Ŀ��
+适合追踪人脸等与背景反差大的目标。
+meanshift的变种，支持尺寸缩放的目标
 
-����:
-640X360�ֱ����£�8ms�� CPU i7 4790
+性能:
+640X360分辨率下，8ms， CPU i7 4790
 
-����ʵ�֣�
+具体实现：
 opencv
+
+3. TLD
+通过光流跟踪，并不断更新检测模型。
+
+性能:
+640X360分辨率下, 60fps, CPI i& 4790
+
+具体实现:
+https://github.com/UsingtcNower/OpenTLD
