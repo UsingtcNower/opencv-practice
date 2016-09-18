@@ -1,6 +1,8 @@
 ##opencv-practice
   The repo which stores kinds of code using opencv.
 ###Content
+####cuda
+        cuda practice
 ####panorama
         dynamic-streaming
 ####tracking
