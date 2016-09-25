@@ -46,5 +46,27 @@ int main(int argc, char **argv)
 {
     int width, height;
     char *imagePath = "";
-    LoadBMPFile();
+    LoadBMPFile((uchar4 **)&pImage, &width, &height, imagePath);
+    if (!pImage) {
+        printf("failed top load bmp.\n");
+        exit(-1);
+    }
+
+    int devId = findCudaDevice(argc, (const char **)argv);
+
+    // result 
+    uint* dData = NULL;
+    checkCudaErrors(cudaMalloc((void **)&dData, width*height*sizeof(uint)));
+
+    cudaChannelFormatDesc channelDesc =
+        cudaCreateChannelDesc<uchar4>();
+    cudaArray *cuArray = NULL;
+    checkCudaErrors(cudaMallocArray(&cuArray, channelDesc, width, height));
+    checkCudaErrors(cudaMemcpyToArray(cuArray, 0, 0, pImage, width*height*sizeof(uint), cudaMemcpyHostToDevice));
+
+    rgbaTex.addressMode[0] = cudaAddressModeWrap;
+    rgbaTex.addressMode[1] = cudaAddressModeWrap;
+
+    checkCudaErrors(cudaBindTextureToArray(rgbaTex, cuArray, channelDesc);
+
 }
