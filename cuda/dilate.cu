@@ -47,13 +47,17 @@ int main(int argc, char **argv)
 {
     int width, height;
     int radius = 3;
-    char *imagePath = "";
-    cv::Mat image = cv::imread(imagePath);
+    char *imagePath = "lena.png";
+    cv::Mat image0 = cv::imread(imagePath);
+    cv::Mat image(image0.cols, image0.rows, CV_8UC4);
+    cv::cvtColor(image0, image, CV_RGB2RGBA);
     if (image.empty()) {
         printf("failed to read image.\n");
         exit(-1);
     }
     assert(image.channels() == 4);
+    width = image.cols;
+    height = image.rows;
 
     int devId = findCudaDevice(argc, (const char **)argv);
 
@@ -64,13 +68,13 @@ int main(int argc, char **argv)
     cudaChannelFormatDesc channelDesc =
         cudaCreateChannelDesc(32, 0, 0, 0, cudaChannelFormatKindFloat);
     cudaArray *cuArray = NULL;
-    checkCudaErrors(cudaMallocArray(&cuArray, channelDesc, width, height));
+    checkCudaErrors(cudaMallocArray(&cuArray, &channelDesc, width, height));
     checkCudaErrors(cudaMemcpyToArray(cuArray, 0, 0, image.data, width*height*sizeof(uint), cudaMemcpyHostToDevice));
 
     rgbaTex.addressMode[0] = cudaAddressModeWrap;
     rgbaTex.addressMode[1] = cudaAddressModeWrap;
 
-    checkCudaErrors(cudaBindTextureToArray(rgbaTex, cuArray, channelDesc);
+    checkCudaErrors(cudaBindTextureToArray(rgbaTex, cuArray, channelDesc));
 
     dim3 dimBlock(16,16);
     dim3 dimGrid((width+dimBlock.x-1)/dimBlock.x, (height+dimBlock.y-1)/dimBlock.y);
@@ -82,7 +86,7 @@ int main(int argc, char **argv)
     checkCudaErrors(cudaMemcpy(image.data, dData, width*height*sizeof(uint), cudaMemcpyDeviceToHost));
 
     // save
-    cv::imwrite("test_d.png", image);
+    cv::imwrite("me_dilate3.bmp", image);
 
     checkCudaErrors(cudaFree(dData));
     checkCudaErrors(cudaFreeArray(cuArray));
