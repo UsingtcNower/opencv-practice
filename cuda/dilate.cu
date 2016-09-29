@@ -16,7 +16,7 @@ __device__ uint uchar4Touint(uchar4 rgba)
     return uint(rgba.x) | (uint(rgba.y) << 8) | (uint(rgba.z) << 16) | (uint(rgba.w)<<24);
 }
 
-__global__ void dilate(uint *od, int w, int h, int r)
+__global__ void dilate(uchar4 *od, int w, int h, int r)
 {
     int x = blockIdx.x*blockDim.x + threadIdx.x;
     int y = blockIdx.y*blockDim.y + threadIdx.y;
@@ -41,8 +41,8 @@ __global__ void dilate(uint *od, int w, int h, int r)
         }
     }
     //printf("%d,%d,%d,%d\n",t.x, t.y, t.z, t.w);
-    od[y*w + x] = uchar4Touint(t);
-    printf("%d\n", od[y*w+x]);
+    od[y*w + x] = t;
+    
 }
 
 int main(int argc, char **argv)
@@ -64,8 +64,8 @@ int main(int argc, char **argv)
     int devId = findCudaDevice(argc, (const char **)argv);
 
     // device memory for result 
-    uint* dData = NULL;
-    checkCudaErrors(cudaMalloc((void **)&dData, width*height*sizeof(uint)));
+    uchar4* dData = NULL;
+    checkCudaErrors(cudaMalloc((void **)&dData, width*height*sizeof(uchar4)));
 
     cudaChannelFormatDesc channelDesc =
         cudaCreateChannelDesc<uchar4>();
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
     checkCudaErrors(cudaDeviceSynchronize());
 
     // host memory
-    checkCudaErrors(cudaMemcpy(image.data, dData, width*height*sizeof(uint), cudaMemcpyDeviceToHost));
+    checkCudaErrors(cudaMemcpy(image.data, (uchar *)dData, width*height*sizeof(uchar4), cudaMemcpyDeviceToHost));
 
     // save
     cv::imwrite("me_dilate3.bmp", image);
