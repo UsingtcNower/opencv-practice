@@ -3,17 +3,17 @@
 #include <helper_functions.h>
 #include <opencv2/opencv.hpp>
 
-texture<uchar4, 2, cudaReadModeNormalizedFloat> rgbaTex;
+texture<uchar4, 2, cudaReadModeElementType> rgbaTex;
 uint* pImage;
 
-__device__ uint float4Touint(float4 rgba)
+__device__ uint uchar4Touint(uchar4 rgba)
 {
-    rgba.x = __saturatef(fabs(rgba.x));
-    rgba.y = __saturatef(fabs(rgba.y));
-    rgba.z = __saturatef(fabs(rgba.z));
-    rgba.w = __saturatef(fabs(rgba.w));
+    rgba.x = __saturatef(abs(rgba.x));
+    rgba.y = __saturatef(abs(rgba.y));
+    rgba.z = __saturatef(abs(rgba.z));
+    rgba.w = __saturatef(abs(rgba.w));
 
-    return uint(rgba.x*255.0f) | (uint(rgba.y*255.0f) << 8) | (uint(rgba.z*255.0f) << 16) | (uint(rgba.w*255.0f)<<24);
+    return uint(rgba.x) | (uint(rgba.y) << 8) | (uint(rgba.z) << 16) | (uint(rgba.w)<<24);
 }
 
 __global__ void dilate(uint *od, int w, int h, int r)
@@ -25,11 +25,11 @@ __global__ void dilate(uint *od, int w, int h, int r)
         return;
     }
 
-    float4 center = tex2D(rgbaTex, x, y);
-    float4 t = center;
+    uchar4 center = tex2D(rgbaTex, x, y);
+    uchar4 t = center;
     for (int i = -r; i <= r; ++i) {
         for (int j = -r; j <= r; ++j) {
-            float4 curPix = tex2D(rgbaTex, x + i, y + i);
+            uchar4 curPix = tex2D(rgbaTex, x + i, y + i);
             if (t.x < curPix.x)
                 t.x = curPix.x;
             if (t.y < curPix.y)
@@ -40,7 +40,9 @@ __global__ void dilate(uint *od, int w, int h, int r)
                 t.w = curPix.w;
         }
     }
-    od[y*w + x] = float4Touint(t);
+    //printf("%d,%d,%d,%d\n",t.x, t.y, t.z, t.w);
+    od[y*w + x] = uchar4Touint(t);
+    printf("%d\n", od[y*w+x]);
 }
 
 int main(int argc, char **argv)
@@ -66,7 +68,7 @@ int main(int argc, char **argv)
     checkCudaErrors(cudaMalloc((void **)&dData, width*height*sizeof(uint)));
 
     cudaChannelFormatDesc channelDesc =
-        cudaCreateChannelDesc(32, 0, 0, 0, cudaChannelFormatKindFloat);
+        cudaCreateChannelDesc<uchar4>();
     cudaArray *cuArray = NULL;
     checkCudaErrors(cudaMallocArray(&cuArray, &channelDesc, width, height));
     checkCudaErrors(cudaMemcpyToArray(cuArray, 0, 0, image.data, width*height*sizeof(uint), cudaMemcpyHostToDevice));
