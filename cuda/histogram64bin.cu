@@ -8,6 +8,14 @@
 
 cv::Mat histImg;
 
+__global__ void vectorAddKernel(float* A, float* B, float* C, int numCnt)
+{
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    if (i < numCnt) {
+        C[i] = A[i] + B[i];
+    }
+}
+
 __global__ void hist64binKernel(uchar* drData, int* partialHist)
 {
     __shared__ uchar s_hist[64*THREADBLOCK_SIZE];
