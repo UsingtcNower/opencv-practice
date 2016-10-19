@@ -95,6 +95,10 @@ int main(int argc, char** argv)
 				break;
 			}
 
+    cudaFree(d_A.pdata);
+    cudaFree(d_B.pdata);
+    cudaFree(d_C.pdata);
+
 	printf("Check Result: %d\n", check);
 	return 0;
 }
