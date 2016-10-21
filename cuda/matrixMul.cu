@@ -54,15 +54,15 @@ __global__ void matrixMul_SharedMemory(Matrix d_A, Matrix d_B, Matrix d_C)
 
     int cSum = 0;
 
-    for (int i = 0; i < d_A.width / 16; ++i) {
+    for (int i = 0; i < (d_A.width / 16); ++i) {
         __shared__ int sA[16][16];
         __shared__ int sB[16][16];
 
         Matrix aSub = getSubMatrix(d_A, i, blockY);
         Matrix bSub = getSubMatrix(d_B, blockX, i);
 
-        sA[y][x] = aSub.pdata[y*aSub.width+x];
-        sB[y][x] = bSub.pdata[y*bSub.width+x];
+        sA[y][x] = aSub.pdata[y*d_A.width+x];
+        sB[y][x] = bSub.pdata[y*d_B.width+x];
 
         __syncthreads();
 
@@ -72,20 +72,20 @@ __global__ void matrixMul_SharedMemory(Matrix d_A, Matrix d_B, Matrix d_C)
         __syncthreads();
     }
 
-    cSub.pdata[y*cSub.width+x] = cSum;
+    cSub.pdata[y*d_C.width+x] = cSum;
 }
 
 int main(int argc, char** argv)
 {
 	Matrix A;
-    A.width = 32;// 720;
-    A.height = 32;// 640;
+    A.width = 16;// 720;
+    A.height = 16;// 640;
     A.pitch = A.width*sizeof(int);
 	A.pdata = (int*)malloc(A.width*A.height*sizeof(int));
 
 	Matrix B;
     B.width = 32;//1280;
-    B.height = 32;// 720;
+    B.height = 16;// 720;
     B.pitch = B.width*sizeof(int);
 	B.pdata = (int*)malloc(B.width*B.height*sizeof(int));
 
