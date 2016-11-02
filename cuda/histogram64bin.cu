@@ -26,7 +26,7 @@ __global__ void hist64binKernel(uchar* drData, int* partialHist, int dataCount)
     __syncthreads();
     int threadPos = blockDim.x*blockIdx.x + threadIdx.x;
     if (threadPos < dataCount) {
-        s_hist[drData[threadPos] * THREADBLOCK_SIZE + threadIdx.x] ++;
+        s_hist[(drData[threadPos]>>2) * THREADBLOCK_SIZE + threadIdx.x] ++;
     }
     __syncthreads();
     if (threadIdx.x == 0) {
