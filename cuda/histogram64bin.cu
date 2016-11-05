@@ -60,7 +60,7 @@ __global__ void hist64binMerge(int* partialHist, int* hist, int histCount)
 int main(int argc, char** argv)
 {
     int histSize = 64;
-    cv::Mat img0 = cv::imread("lena.png");
+    cv::Mat img0 = cv::imread("C:\\ProgramData\\NVIDIA Corporation\\CUDA Samples\\v7.5\\Debug\\lena.png");
     if (img0.empty()) {
         printf("error imread.\n");
         return -1;
@@ -96,18 +96,29 @@ int main(int argc, char** argv)
     // draw
     int hist_w = 512;
     int hist_h = 400;
-    histImg = cv::Mat(hist_w, hist_h, CV_8UC3, cv::Scalar(0,0,0));
+    histImg = cv::Mat(hist_h, hist_w, CV_8UC3);
     int bin_w = cvRound((double)hist_w/histSize);
+
+    int max_h = hist[0];
+    for (int i = 0; i < histSize; ++i) {
+        if (hist[i]>max_h)
+            max_h = hist[i];
+    }
 
     for (int i = 0; i < histSize; ++i)
     {
-        hist[i] = hist[i] * hist_h / 256;
+        hist[i] = hist[i] * hist_h / max_h;
+        assert(hist[i] >= 0);
+        assert(hist[i]<=hist_h);
     }
     for (int i = 1; i < histSize; ++i) {
         cv::line(histImg, cv::Point((i-1)*bin_w, hist_h-hist[i-1]),
                           cv::Point(i*bin_w, hist_h-hist[i]),
                           cv::Scalar(255, 0, 0), 2, 8, 0);
     }
-    cv::imwrite("histImg.png", histImg);
+    cv::imshow("hist", histImg);
+    cv::waitKey();
+    //cv::imwrite("D:\\histImg.png", histImg);
+   
     return 0;
 }
