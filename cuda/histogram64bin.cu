@@ -20,6 +20,7 @@ __global__ void vectorAddKernel(float* A, float* B, float* C, int numCnt)
 __global__ void hist64binKernel(uchar* drData, int* partialHist, int dataCount)
 {
     __shared__ int s_hist[64*THREADBLOCK_SIZE];
+    //TODO: 使用shuffle避免bank冲突
     for (int i = 0; i < 64; ++i) {
         s_hist[i*THREADBLOCK_SIZE + threadIdx.x] = 0;
     }
@@ -29,6 +30,7 @@ __global__ void hist64binKernel(uchar* drData, int* partialHist, int dataCount)
         s_hist[(drData[threadPos]>>2) * THREADBLOCK_SIZE + threadIdx.x] ++;
     }
     __syncthreads();
+    //TODO: 使用折半求和优化
     if (threadIdx.x == 0) {
         for (int i = 0; i < 64; ++i) {
             int sum = 0;
@@ -49,6 +51,7 @@ __global__ void hist64binMerge(int* partialHist, int* hist, int histCount)
     }
     data[threadIdx.x] = sum;
     __syncthreads();
+    //TODO: 使用折半求和优化
     if (threadIdx.x == 0) {
         sum = 0;
         for (int i = 0; i < 256; ++i)
