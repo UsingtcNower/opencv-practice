@@ -21,4 +21,4 @@ class KNearestNeighbor(object):
         num_train = self.X_train.shape[0]
         dists = np.zeros((num_test, num_train))
 
-        
+        xy = np.multiply(np.dot(X, self.X_train.T),-2)
