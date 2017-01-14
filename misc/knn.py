@@ -17,6 +17,8 @@ class KNearestNeighbor(object):
             dists = self.compute_distance_one_loops(X)
         elif num_loops == 2:
             dists = self.compute_distance_two_loops(X)
+        elif num_loops == 3:
+            dists = self.compute_distance_l1(X)
         else:
             raise ValueError('Invalid value %d for num_loops' % num_loops)
 
@@ -59,6 +61,15 @@ class KNearestNeighbor(object):
         dists = np.add(dists, s2) 
         dists = np.sqrt(dists) 
         #print 'dists %r' % dists
+        return dists
+        
+    def compute_distance_l1(self, X):
+        num_test = X.shape[0]
+        num_train = self.X_train.shape[0]
+        dists = np.zeros((num_test, num_train))
+        
+        for i in xrange(num_test):
+            dists[i] = np.sum(np.abs(X[i,:]-self.X_train), axis=1)
         return dists
 
     def predict_labels(self, dists, k=1):
