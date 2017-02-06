@@ -16,7 +16,7 @@ class TwoLayerNet(object):
 	@param X (N,D)
 	'''
 	def predict(self,X):
-	    y_pred = None
+	  y_pred = None
 		h1 = np.maximum(0, X.dot(self.params['w1'])+self.params['b1']) #relu
 		scores = h1.dot(self.params['w2'])+self.params['b2']
 		y_pred = np.argmax(scores, axis=1)
@@ -31,10 +31,18 @@ class TwoLayerNet(object):
 	loss, grads
 	'''
 	def loss(self, X, y, reg):
+		  w1 = self.params['w1']
+		  b1 = self.params['b1']
+		  w2 = self.params['w2']
+		  b2 = self.params['b2']
 	    #forward
-		
-		#backward
-	
+	    h1 = np.maximum(0, X.dot(w1)+b1) #relu
+	    score = h1.dot(w2)+b2
+	    ##softmax
+	    prob = np.exp(score)/np.sum(np.exp(score))
+	    loss = -np.log(prob)
+	    #backward
+	    AVFormatContext
 	'''
 	@param X (N,D)
 	@param y (N,) 0=<yi<C
@@ -56,7 +64,7 @@ class TwoLayerNet(object):
 		iters_per_epoch = np.max(num_train/batch_size,1)
 		
 		for i in xrange(iters):
-		    sample_index = np.random.choice(num_train, batch_size, replace=False)
+		  sample_index = np.random.choice(num_train, batch_size, replace=False)
 			X_batch = X[sample_index,:]
 			y_batch = y[sample_index]
 			loss, gradient = self.loss(X_batch, y_batch, reg)
