@@ -42,7 +42,22 @@ class TwoLayerNet(object):
 	    prob = np.exp(score)/np.sum(np.exp(score))
 	    loss = -np.log(prob)
 	    #backward
-	    AVFormatContext
+	    #暂时使用网上的微分公式
+	    dscores = probs  # (N,C) 
+      dscores[range(N), y] -= 1  #  这个是输出的误差敏感项也就是梯度的计算，具体可以看上面softmax 的计算
+      dscores /= N
+      # Backprop into W2 and b2
+      dW2 = np.dot(h1.T, dscores)  # (H,C) BP算法的计算，下面同理
+      db2 = np.sum(dscores, axis=0, keepdims=True)  # (1,C
+      # Backprop into hidden layer
+      dh1 = np.dot(dscores, W2.T)  # (N,H)
+      # Backprop into ReLU non-linearity
+      dh1[h1 <= 0] = 0
+      # Backprop into W1 and b1
+      dW1 = np.dot(X.T, dh1)  # (D,H)
+      db1 = np.sum(dh1, axis=0, keepdims=True)  # (1,H)
+      # Add the regularization gradient contribution
+	    
 	'''
 	@param X (N,D)
 	@param y (N,) 0=<yi<C
